@@ -1,3 +1,5 @@
 # Hello World!
 
-Lear more at [GitHub Pages](//docs.github.com/en/pages).
+Lear more:
+-   [GitHub Pages](//docs.github.com/en/pages).
+-   [Minimal - A Theme for GitHub Pages](//orderedlist.com/minimal/)
