@@ -1,3 +1,3 @@
 # Hello World!
 
-Lear more at [Quickstart for GitHub Pages](https://docs.github.com/en/pages/quickstart).
+Lear more at [GitHub Pages](//docs.github.com/en/pages).
