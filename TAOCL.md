@@ -1,3 +1,4 @@
+原文出處: <https://github.com/jlevy/the-art-of-command-line>
 
 # [命令列的藝術](https://github.com/jlevy/the-art-of-command-line/blob/master/README-zh.md)
 
@@ -14,26 +15,27 @@
 - [Windows 限定](#Windows-限定)
 - [更多資源](#更多資源)
 - [免責聲明](#免責聲明)
+- [授權條款](#授權條款)
 
 ![``curl -s 'https://raw.githubusercontent.com/jlevy/the-art-of-command-line/master/README.md' | egrep -o '`\w+`' | tr -d '`' | cowsay -W50``](https://raw.githubusercontent.com/jlevy/the-art-of-command-line/master/cowsay.png)
 
-熟練使用命令列是一種常常被忽視，或被認為難以掌握的技能，但實際上，它會提高你作為工程師的靈活性以及生產力。本文是一分我在 Linux 上工作時，發現的一些命令列使用技巧的摘要。有些技巧非常基礎，而另一些則相當複雜，甚至晦澀難懂。這篇文章並不長，但當你能夠熟練掌握這裡列出的所有技巧時，你就學會了很多關於命令列的東西了。
+嫻熟的使用命令列是一種常被忽視，或被認為難以掌握的技能，但實際上，它會提高你作為工程師的靈活性以及生產力。本文是一分我在 Linux 上工作時，發現的一些命令列使用技巧的摘要。有些技巧非常基礎，而另一些則相當複雜，甚至晦澀難懂。這篇文章並不長，但當您能夠駕御這裡列出的所有技巧時，就可以學會很多關於命令列的東西。
 
-這篇文章是[許多作者和譯者](AUTHORS.md)共同的成果。這裡的部分內容[首次](http://www.quora.com/What-are-some-lesser-known-but-useful-Unix-commands)[出現](http://www.quora.com/What-are-the-most-useful-Swiss-army-knife-one-liners-on-Unix)於 [Quora](http://www.quora.com/What-are-some-time-saving-tips-that-every-Linux-user-should-know)，但已經遷移到了 Github，並由眾多高手做出了許多改進。如果你在本文中發現了錯誤或者存在可以改善的地方，請[**貢獻你的一分力量**](CONTRIBUTING.md)。
+這篇文章是[許多作者和譯者](https://github.com/jlevy/the-art-of-command-line/blob/master/AUTHORS.md)共同的成果。這裡的部分內容[首次](http://www.quora.com/What-are-some-lesser-known-but-useful-Unix-commands)[出現](http://www.quora.com/What-are-the-most-useful-Swiss-army-knife-one-liners-on-Unix)在 [Quora](http://www.quora.com/What-are-some-time-saving-tips-that-every-Linux-user-should-know)，但已經遷移到了 Github，並由許多高手做出了改善。如果你在本文中發現了錯誤或者有可以改進的地方，請[**不吝賜教**](https://github.com/jlevy/the-art-of-command-line/blob/master/CONTRIBUTING.md)。
 
 ## 前言
 
 涵蓋範圍：
 
-- 這篇文章不僅能幫助剛接觸命令列的新手，而且對具有經驗的人也大有裨益。本文致力於做到**覆蓋面廣**（涉及所有重要的內容），**具體**（給出具體的最常用的例子），以及**簡潔**（避免冗餘的內容，或是可以在其他地方輕鬆查到的細枝末節）。在特定應用場景下，本文的內容屬於基本功或者能幫助您節約大量的時間。
-- 本文主要為 Linux 所寫，但在[OS X 限定](#OS-X-限定)章節和[Windows 限定](#Windows-限定)章節中也包含有對應作業系統的內容。除去這兩個章節外，其它的內容大部分均可在其他類 Unix 系統或 OS X，甚至 Cygwin 中得到應用。
-- 本文主要關注於互動式 Bash，但也有很多技巧可以應用於其他 shell 和 Bash 指令碼當中。
-- 除去「標準的」Unix 命令，本文還包括了一些相依於特定套裝軟體的命令（前提是它們具有足夠的價值）。
+- 這篇文章不僅能幫助剛接觸命令列的新手，而且對具有經驗的人也大有裨益。本文致力於做到**覆蓋面廣**（盡可能涵括所有重要的內容），**具體**（給出常用的具體實例），以及**簡潔**（避免冗餘的內容，或可以很容易的在其他地方查到的旁枝末節）。在特定應用場景下，本文的內容屬於基本功或者能幫助您節約大量的時間。
+- 本文針對 Linux 所撰寫，但在 [OS X 限定](#OS-X-限定)和 [Windows 限定](#Windows-限定)章節中也包含與作業系統相對應的內容。除去這兩個章節外，其它章節中的大部分內容均適用其他 Unix 系統或 OS X，甚至是 Cygwin。
+- 本文聚焦在互動式 Bash，但很多技巧可以套用在其他 shell 和 Bash 指令當中。
+- 除了「標準的」Unix 命令，本文還包括了一些相依於特定套裝軟體的命令（前提是它們要夠重要）。
 
 注意事項：
 
-- 為了能在一頁內展示盡量多的東西，一些具體的資訊可以在引用的頁面中找到。我們相信機智的你知道如何使用 Google 或者其他搜尋引擎來查閱到更多的詳細資訊。文中部分命令需要您使用 `apt-get`、`yum`、`dnf`、`pacman`、`pip` 或 `brew`（以及其它合適的套裝軟體管理程式）來安裝相依的程式。
-- 遇到問題的話，請嘗試使用 [Explainshell](http://explainshell.com/) 去獲取相關命令、參數、管道等內容的解釋。
+- 為了能在一頁內展示最多的內容，一些具體的資訊可以在引用的頁面中找到。我們相信聰明的你知道如何利用 Google 或者其他搜尋引擎來查閱到更多的詳細資訊。文中部分命令需要您使用 `apt-get`、`yum`、`dnf`、`pacman`、`pip` 或 `brew`（或其它合適的套裝軟體管理程式）來安裝相依的程式。
+- 遇到問題的話，請先試著利用 [Explainshell](http://explainshell.com/) 去取得相關命令、參數、管道等內容的說明。
 
 ## 基礎
 
