@@ -78,10 +78,10 @@
 - 要想在幾臺電腦中同步你的配置檔案（例如 `.bashrc` 和 `.bash_profile`），可以借助 Git。
 - 當變數和檔名中包含空格的時候要格外小心。Bash 變數要用引號括起來，比如 `"$FOO"`。盡量使用 `-0` 或 `-print0` 選項以便用 NULL 來分隔檔名，例如 `locate -0 pattern | xargs -0 ls -al` 或 `find / -print0 -type d | xargs -0 ls -al`。如果 for 循環中循環存取的檔名含有空字元（空格、tab 等字元），只需用 `IFS=$'\n'` 把內部欄位分隔符設為換行符。
 - 在 Bash 指令碼中，使用 `set -x` 去除錯輸出（或者使用它的變體 `set -v`，它會記錄原始輸入，包括多餘的參數和註釋）。盡可能地使用嚴格模式：使用 `set -e` 令指令碼在發生錯誤時退出而不是繼續執行；使用 `set -u` 來檢查是否使用了未賦值的變數；試試 `set -o pipefail`，它可以監測管道中的錯誤。當牽扯到很多指令碼時，使用 `trap` 來檢測 ERR 和 EXIT。一個好的習慣是在指令碼檔案開頭這樣寫，這會使它能夠檢測一些錯誤，並在錯誤發生時中斷程式並輸出資訊：
-```bash
-set -euo pipefail
-trap "echo 'error: Script failed: see failed command above'" ERR
-```
+  ```bash
+  set -euo pipefail
+  trap "echo 'error: Script failed: see failed command above'" ERR
+  ```
 - 在 Bash 指令碼中，子 shell（使用括號 `(`...`)`）是一種組織參數的便捷方式。一個常見的例子是臨時地移動工作路徑，程式碼如下：
   ```bash
   # do something in current dir
