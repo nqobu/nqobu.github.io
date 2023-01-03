@@ -1,5 +1,5 @@
 
-# [命令列的藝術](//github.com/jlevy/the-art-of-command-line/blob/master/README-zh.md)
+# [命令列的藝術](https://github.com/jlevy/the-art-of-command-line/blob/master/README-zh.md)
 
 [![Join the chat at https://gitter.im/jlevy/the-art-of-command-line](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/jlevy/the-art-of-command-line?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
@@ -7,15 +7,15 @@
 - [基礎](#基礎)
 - [日常使用](#日常使用)
 - [檔案及資料處理](#檔案及資料處理)
-- [系統除錯](#系統除錯)
-- [單行指令碼](#單行指令碼)
+- [系統偵錯](#系統偵錯)
+- [單行指令](#單行指令)
 - [冷門但有用](#冷門但有用)
-- [僅限 OS X 系統](#僅限-OS-X-系統)
-- [僅限 Windows 系統](#僅限-Windows-系統)
+- [OS X 限定](#OS-X-限定)
+- [Windows 限定](#Windows-限定)
 - [更多資源](#更多資源)
 - [免責聲明](#免責聲明)
 
-![curl -s 'https://raw.githubusercontent.com/jlevy/the-art-of-command-line/master/README.md' | egrep -o '`\w+`' | tr -d '`' | cowsay -W50](//github.com/jlevy/the-art-of-command-line/raw/master/cowsay.png)
+![``curl -s 'https://raw.githubusercontent.com/jlevy/the-art-of-command-line/master/README.md' | egrep -o '`\w+`' | tr -d '`' | cowsay -W50``](https://raw.githubusercontent.com/jlevy/the-art-of-command-line/master/cowsay.png)
 
 熟練使用命令列是一種常常被忽視，或被認為難以掌握的技能，但實際上，它會提高你作為工程師的靈活性以及生產力。本文是一分我在 Linux 上工作時，發現的一些命令列使用技巧的摘要。有些技巧非常基礎，而另一些則相當複雜，甚至晦澀難懂。這篇文章並不長，但當你能夠熟練掌握這裡列出的所有技巧時，你就學會了很多關於命令列的東西了。
 
@@ -26,7 +26,7 @@
 涵蓋範圍：
 
 - 這篇文章不僅能幫助剛接觸命令列的新手，而且對具有經驗的人也大有裨益。本文致力於做到**覆蓋面廣**（涉及所有重要的內容），**具體**（給出具體的最常用的例子），以及**簡潔**（避免冗餘的內容，或是可以在其他地方輕鬆查到的細枝末節）。在特定應用場景下，本文的內容屬於基本功或者能幫助您節約大量的時間。
-- 本文主要為 Linux 所寫，但在[僅限 OS X 系統](#僅限-OS-X-系統)章節和[僅限 Windows 系統](#僅限-Windows-系統)章節中也包含有對應作業系統的內容。除去這兩個章節外，其它的內容大部分均可在其他類 Unix 系統或 OS X，甚至 Cygwin 中得到應用。
+- 本文主要為 Linux 所寫，但在[OS X 限定](#OS-X-限定)章節和[Windows 限定](#Windows-限定)章節中也包含有對應作業系統的內容。除去這兩個章節外，其它的內容大部分均可在其他類 Unix 系統或 OS X，甚至 Cygwin 中得到應用。
 - 本文主要關注於互動式 Bash，但也有很多技巧可以應用於其他 shell 和 Bash 指令碼當中。
 - 除去「標準的」Unix 命令，本文還包括了一些依賴於特定套裝軟體的命令（前提是它們具有足夠的價值）。
 
@@ -77,7 +77,7 @@
 - 把環境變數的設定以及登陸時要執行的命令儲存在 `~/.bash_profile`。而對於從圖形界面啟動的 shell 和 `cron` 啟動的 shell，則需要單獨配置檔案。
 - 要想在幾臺電腦中同步你的配置檔案（例如 `.bashrc` 和 `.bash_profile`），可以借助 Git。
 - 當變數和檔名中包含空格的時候要格外小心。Bash 變數要用引號括起來，比如 `"$FOO"`。盡量使用 `-0` 或 `-print0` 選項以便用 NULL 來分隔檔名，例如 `locate -0 pattern | xargs -0 ls -al` 或 `find / -print0 -type d | xargs -0 ls -al`。如果 for 循環中循環存取的檔名含有空字元（空格、tab 等字元），只需用 `IFS=$'\n'` 把內部欄位分隔符設為換行符。
-- 在 Bash 指令碼中，使用 `set -x` 去除錯輸出（或者使用它的變體 `set -v`，它會記錄原始輸入，包括多餘的參數和註釋）。盡可能地使用嚴格模式：使用 `set -e` 令指令碼在發生錯誤時退出而不是繼續執行；使用 `set -u` 來檢查是否使用了未賦值的變數；試試 `set -o pipefail`，它可以監測管道中的錯誤。當牽扯到很多指令碼時，使用 `trap` 來檢測 ERR 和 EXIT。一個好的習慣是在指令碼檔案開頭這樣寫，這會使它能夠檢測一些錯誤，並在錯誤發生時中斷程式並輸出資訊：
+- 在 Bash 指令碼中，使用 `set -x` 去偵錯輸出（或者使用它的變體 `set -v`，它會記錄原始輸入，包括多餘的參數和註釋）。盡可能地使用嚴格模式：使用 `set -e` 令指令碼在發生錯誤時退出而不是繼續執行；使用 `set -u` 來檢查是否使用了未賦值的變數；試試 `set -o pipefail`，它可以監測管道中的錯誤。當牽扯到很多指令碼時，使用 `trap` 來檢測 ERR 和 EXIT。一個好的習慣是在指令碼檔案開頭這樣寫，這會使它能夠檢測一些錯誤，並在錯誤發生時中斷程式並輸出資訊：
   ```shell
   set -euo pipefail
   trap "echo 'error: Script failed: see failed command above'" ERR
@@ -144,7 +144,7 @@
 - 使用 [`shyaml`](https://github.com/0k/shyaml) 處理 YAML。
 - 要處理 Excel 或 CSV 檔案的話，[csvkit](https://github.com/onyxfish/csvkit) 提供了 `in2csv`、`csvcut`、`csvjoin`、`csvgrep` 等方便易用的工具。
 - 當你要處理 Amazon S3 相關的工作的時候，[`s3cmd`](https://github.com/s3tools/s3cmd) 是一個很方便的工具而 [`s4cmd`](https://github.com/bloomreach/s4cmd) 的效率更高。Amazon 官方提供的 [`aws`](https://github.com/aws/aws-cli) 以及 [`saws`](https://github.com/donnemartin/saws) 是其他 AWS 相關工作的基礎，值得學習。
-- 瞭解如何使用 `sort` 和 `uniq`，包括 uniq 的 `-u` 參數和 `-d` 參數，具體內容在後文單行指令碼節中。另外可以瞭解一下 `comm`。
+- 瞭解如何使用 `sort` 和 `uniq`，包括 uniq 的 `-u` 參數和 `-d` 參數，具體內容在後文單行指令節中。另外可以瞭解一下 `comm`。
 - 瞭解如何使用 `cut`、`paste` 和 `join` 來更改檔案。很多人都會使用 `cut`，但遺忘了 `join`。
 - 瞭解如何運用 `wc` 去計算新行數（`-l`），字元數（`-m`），單詞數（`-w`）以及位元組數（`-c`）。
 - 瞭解如何使用 `tee` 將標準輸入複製到檔案甚至標準輸出，例如 `ls -al | tee file.txt`。
@@ -192,30 +192,30 @@
   ```
 - 為了高效地建立空檔案，請使用 `truncate`（建立[稀疏檔案](https://zh.wikipedia.org/wiki/ 稀疏檔案)）、`fallocate`（用於 ext4、xfs、btrf 和 ocfs2 檔案系統）、`xfs_mkfile`（適用於幾乎所有的檔案系統，包含在 xfsprogs 套裝軟體中）, `mkfile`（用於類 Unix 作業系統，比如 Solaris 和 Mac OS）。
 
-## 系統除錯
+## 系統偵錯
 
-- `curl` 和 `curl -I` 可以被輕鬆地應用於 web 除錯中，它們的好兄弟 `wget` 也是如此，或者也可以試試更潮的 [`httpie`](https://github.com/jkbrzt/httpie)。
+- `curl` 和 `curl -I` 可以被輕鬆地應用於 web 偵錯中，它們的好兄弟 `wget` 也是如此，或者也可以試試更潮的 [`httpie`](https://github.com/jkbrzt/httpie)。
 - 獲取 CPU 和硬碟的使用狀態，通常使用使用 `top`（`htop` 更佳）, `iostat` 和 `iotop`。而 `iostat -mxz 15` 可以讓你獲悉 CPU 和每個硬碟分割槽的基本資訊和效能表現。
 - 使用 `netstat` 和 `ss` 檢視網路連線的細節。
 - `dstat` 在你想要對系統的現狀有一個粗略的認識時是非常有用的。然而若要對系統有一個深度的總體認識，使用 [`glances`](https://github.com/nicolargo/glances)，它會在一個終端視窗中向你提供一些系統級的資料。
 - 若要瞭解記憶體狀態，執行並理解 `free` 和 `vmstat` 的輸出。值得留意的是「cached」的值，它指的是 Linux 內核用來作為檔案快取的記憶體大小，而與空閑記憶體無關。
-- Java 系統除錯則是一件截然不同的事，一個可以用於 Oracle 的 JVM 或其他 JVM 上的除錯的技巧是你可以執行 `kill -3 <pid>` 同時一個完整的棧軌跡和堆概述（包括 GC 的細節）會被儲存到標準錯誤或是日誌檔案。JDK 中的 `jps`、`jstat`、`jstack`、`jmap` 很有用。[SJK tools](https://github.com/aragozin/jvm-tools) 更高級。
+- Java 系統偵錯則是一件截然不同的事，一個可以用於 Oracle 的 JVM 或其他 JVM 上的偵錯的技巧是你可以執行 `kill -3 <pid>` 同時一個完整的棧軌跡和堆概述（包括 GC 的細節）會被儲存到標準錯誤或是日誌檔案。JDK 中的 `jps`、`jstat`、`jstack`、`jmap` 很有用。[SJK tools](https://github.com/aragozin/jvm-tools) 更高級。
 - 使用 [`mtr`](http://www.bitwizard.nl/mtr/) 去跟蹤路由，用於確定網路問題。
 - 用 [`ncdu`](https://dev.yorhel.nl/ncdu) 來檢視磁碟使用情況，它比尋常的命令，如 ``du -sh *``，更節省時間。
 - 查詢正在使用頻寬的套接字連線或程序，使用 [`iftop`](http://www.ex-parrot.com/~pdw/iftop/) 或 [`nethogs`](https://github.com/raboof/nethogs)。
 - `ab` 工具（Apache 中自帶）可以簡單粗暴地檢查 web 伺服器的效能。對於更複雜的負載測試，使用 `siege`。
-- [`wireshark`](https://wireshark.org/), [`tshark`](https://www.wireshark.org/docs/wsug_html_chunked/AppToolstshark.html) 和 [`ngrep`](http://ngrep.sourceforge.net/) 可用於複雜的網路除錯。
+- [`wireshark`](https://wireshark.org/), [`tshark`](https://www.wireshark.org/docs/wsug_html_chunked/AppToolstshark.html) 和 [`ngrep`](http://ngrep.sourceforge.net/) 可用於複雜的網路偵錯。
 - 瞭解 `strace` 和 `ltrace`。這倆工具在你的程式執行失敗、掛起甚至崩潰，而你卻不知道為什麼或你想對效能有個總體的認識的時候是非常有用的。注意 profile 參數（`-c`）和附加到一個執行的程序參數（`-p`）。
 - 瞭解使用 `ldd` 來檢查共享庫。但是 [永遠不要在不信任的檔案上執行](http://www.catonmat.net/blog/ldd-arbitrary-code-execution/)。
 - 瞭解如何運用 `gdb` 連線到一個執行著的程序並獲取它的堆疊軌跡。
-- 學會使用 `/proc`。它在除錯正在出現的問題的時候有時會效果驚人。比如：`/proc/cpuinfo`、`/proc/meminfo`、`/proc/cmdline`、`/proc/xxx/cwd`、`/proc/xxx/exe`、`/proc/xxx/fd/`、`/proc/xxx/smaps`（這裡的 `xxx` 表示程序的 id 或 pid）。
-- 當除錯一些之前出現的問題的時候，[`sar`](http://sebastien.godard.pagesperso-orange.fr/) 非常有用。它展示了 cpu、記憶體以及網路等的軌跡資料。
+- 學會使用 `/proc`。它在偵錯正在出現的問題的時候有時會效果驚人。比如：`/proc/cpuinfo`、`/proc/meminfo`、`/proc/cmdline`、`/proc/xxx/cwd`、`/proc/xxx/exe`、`/proc/xxx/fd/`、`/proc/xxx/smaps`（這裡的 `xxx` 表示程序的 id 或 pid）。
+- 當偵錯一些之前出現的問題的時候，[`sar`](http://sebastien.godard.pagesperso-orange.fr/) 非常有用。它展示了 cpu、記憶體以及網路等的軌跡資料。
 - 關於更深層次的系統分析以及效能分析，看看 `stap`（[SystemTap](https://sourceware.org/systemtap/wiki）)、[`perf`](https://en.wikipedia.org/wiki/Perf_(Linux），以及 [`sysdig`](https://github.com/draios/sysdig)。
 - 檢視你當前使用的系統，使用 `uname`、`uname -a`（Unix / kernel 資訊）或者 `lsb_release -a`（Linux 發行版資訊）。
 - 無論什麼東西工作得很歡樂（可能是硬體或驅動問題）時可以試試 `dmesg`。
 - 如果你刪除了一個檔案，但透過 `du` 發現沒有釋放預期的磁碟空間，請檢查檔案是否被程序佔用：`lsof | grep deleted | grep "filename-of-my-big-file"`
 
-## 單行指令碼
+## 單行指令
 
 一些命令組合的例子：
 
@@ -260,7 +260,7 @@
 - `yes`: 多次列印字串
 - `cal`: 漂亮的日曆
 - `env`: 執行一個命令（指令碼檔案中很有用)
-- `printenv`: 顯示環境變數（除錯時或在寫指令碼檔案時很有用)
+- `printenv`: 顯示環境變數（偵錯時或在寫指令碼檔案時很有用)
 - `look`: 查詢以特定字串開頭的單詞或行
 - `cut`、`paste` 和 `join`: 資料修改
 - `fmt`: 格式化文字段落
@@ -274,7 +274,7 @@
 - `factor`: 分解因數
 - [`gpg`](https://gnupg.org/): 加密並簽名檔案
 - `toe`: terminfo 入口列表
-- `nc`: 網路除錯及資料傳輸
+- `nc`: 網路偵錯及資料傳輸
 - `socat`: 套接字代理，與 `netcat` 類似
 - [`slurm`](https://github.com/mattthias/slurm): 網路流量視覺化
 - `dd`: 檔案或裝置間傳輸資料
@@ -301,11 +301,11 @@
 - `ldd`: 動態庫資訊
 - `nm`: 提取 obj 檔案中的符號
 - `ab` 或 [`wrk`](https://github.com/wg/wrk): web 伺服器效能分析
-- `strace`: 除錯系統呼叫
-- [`mtr`](http://www.bitwizard.nl/mtr/): 更好的網路除錯跟蹤工具
+- `strace`: 偵錯系統呼叫
+- [`mtr`](http://www.bitwizard.nl/mtr/): 更好的網路偵錯跟蹤工具
 - `cssh`: 視覺化的併發 shell
 - `rsync`: 透過 ssh 或本地檔案系統同步檔案和資料夾
-- [`wireshark`](https://wireshark.org/) 和 [`tshark`](https://www.wireshark.org/docs/wsug_html_chunked/AppToolstshark.html): 抓封包和網路除錯工具
+- [`wireshark`](https://wireshark.org/) 和 [`tshark`](https://www.wireshark.org/docs/wsug_html_chunked/AppToolstshark.html): 抓封包和網路偵錯工具
 - [`ngrep`](http://ngrep.sourceforge.net/): 網路層的 grep
 - `host` 和 `dig`: DNS 查詢
 - `lsof`: 列出當前系統打開檔案的工具以及檢視埠資訊
@@ -329,7 +329,7 @@
 - `lsmod` 和 `modinfo`: 列出內核模組，並顯示其細節
 - `fortune`、`ddate` 和 `sl`: 額，這主要取決於你是否認為蒸汽火車和莫名其妙的名人名言是否「有用」
 
-## 僅限 OS X 系統
+## OS X 限定
 
 以下是**僅限於**OS X 系統的技巧。
 
@@ -341,7 +341,7 @@
 - 注意 OS X 系統是基於 BSD UNIX 的，許多命令（例如 `ps`、`ls`、`tail`、`awk`、`sed`）都和 Linux 中有微妙的不同（Linux 很大程度上受到了 System V-style Unix 和 GNU 工具影響）。你可以透過標題為 "BSD General Commands Manual" 的 man 頁面發現這些不同。在有些情況下 GNU 版本的命令也可能被安裝（例如 `gawk` 和 `gsed` 對應 GNU 中的 awk 和 sed）。如果要寫跨平臺的 Bash 指令碼，避免使用這些命令（例如，考慮 Python 或者 `perl`）或者經過仔細的測試。
 - 用 `sw_vers` 獲取 OS X 的版本資訊。
 
-## 僅限 Windows 系統
+## Windows 限定
 
 以下是**僅限於**Windows 系統的技巧。
 
